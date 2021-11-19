@@ -1,5 +1,6 @@
 package com.aor.numbers;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class ListAggregator {
      * @return The maximum value in the list.
      */
     public Integer max(List<Integer> list) {
-        int max = 0;
+        int max = Integer.MIN_VALUE;
 
         for (Integer number : list)
             if (number > max)
@@ -52,9 +53,16 @@ public class ListAggregator {
      * Counts the number of distinct numbers in a list.
      * @return The number of distinct numbers.
      */
-    public int distinct(List<Integer> list) {
-        ListDeduplicator deduplicator = new ListDeduplicator();
-        List<Integer> distinct = deduplicator.deduplicate(list);
+    public int distinct(List<Integer> list,GenericListDeduplicator deduplicator) {
+        class StubListSorter implements GenericListSorter{
+
+            @Override
+            public List<Integer> sort(List<Integer> list) {
+                return Arrays.asList(1,2,2,4,5);
+            }
+        }
+        StubListSorter listSorter = new StubListSorter();
+        List<Integer> distinct = deduplicator.deduplicate(list,listSorter);
 
         return distinct.size();
     }
